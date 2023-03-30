@@ -81,6 +81,10 @@ describe("MyToken", function () {
         it("Should not mint to zero address", async () => {
             await expect(token.connect(owner).mint(ethers.constants.AddressZero, 100)).to.be.revertedWith("ERC20: mint to the zero address");
         })
+
+        it("Should emit event", async () => {
+            await expect(token.connect(owner).mint(user1.address, 100)).to.emit(token, "Transfer").withArgs(ethers.constants.AddressZero, user1.address, 100);
+        });
     });
 
     describe("Operations", () => {
@@ -105,6 +109,10 @@ describe("MyToken", function () {
             it("Should not burn when amount exceeds balance", async () => {
                 await expect(token.connect(user1).burn(101)).to.be.revertedWith("ERC20: burn amount exceeds balance");
             });
+
+            it("Should emit event", async () => {
+                await expect(token.connect(user1).burn(25)).to.emit(token, "Transfer").withArgs(user1.address, ethers.constants.AddressZero, 25);
+            });
         });
     
         describe("Allowance", () => {
@@ -112,6 +120,10 @@ describe("MyToken", function () {
             it("Should approve", async () => {
                 await token.connect(user1).approve(owner.address, 25);
                 expect(await token.allowance(user1.address, owner.address)).to.equal(25);
+            });
+
+            it("Should emit event", async () => {
+                await expect(token.connect(user1).approve(owner.address, 25)).to.emit(token, "Approval").withArgs(user1.address, owner.address, 25);
             });
     
             it("Should not approve to zero address", async () => {
@@ -152,6 +164,10 @@ describe("MyToken", function () {
                 await token.connect(user1).transfer(owner.address, 25);
                 expect(await token.balanceOf(user1.address)).to.equal(75);
                 expect(await token.balanceOf(owner.address)).to.equal(25);
+            });
+
+            it("Should emit event", async () => {
+                await expect(token.connect(user1).transfer(owner.address, 25)).to.emit(token, "Transfer").withArgs(user1.address, owner.address, 25);
             });
     
             it("Should not transfer to zero address", async () => {
