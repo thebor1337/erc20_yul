@@ -134,6 +134,11 @@ describe("MyToken", function () {
                 await token.connect(user1).approve(owner.address, 100);
                 await expect(token.connect(user1).decreaseAllowance(owner.address, 101)).to.be.revertedWith("ERC20: decreased allowance below zero");
             });
+
+            it("Should revert when increase value overflowed", async () => {
+                await token.connect(user1).approve(owner.address, 100);
+                await expect(token.connect(user1).increaseAllowance(owner.address, ethers.constants.MaxUint256)).to.be.reverted;
+            });
         });
     
         describe("Transfer", () => {
