@@ -1,4 +1,4 @@
-const { time, loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
+const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const { bytecode } = require("../artifacts/contracts/MyToken.yul/MyToken.json");
